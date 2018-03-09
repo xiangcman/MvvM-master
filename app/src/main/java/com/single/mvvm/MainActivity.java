@@ -15,8 +15,12 @@ import com.single.mvvm.databinding.ActivityMainBinding;
 import com.single.mvvm.databinding.ListitemNewsBinding;
 import com.single.mvvm.model.MainModel;
 import com.single.mvvm.service.NewsService;
+import com.single.mvvm.service.TopNewsService;
 import com.single.mvvm.utils.DateUtils;
+import com.single.mvvm.utils.GlideImageLoader;
+import com.youth.banner.BannerConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -37,6 +41,30 @@ public class MainActivity extends CommonDaggerActivity<ActivityMainBinding> {
     protected void doCreateView(Bundle savedInstanceState) {
         mainModel = getViewModel(MainModel.class);
         loadNews();
+        loadTopNews();
+    }
+
+    private void loadTopNews() {
+        mainModel.loadTopNews().observe(this, newsResource -> {
+            switch (newsResource.status) {
+                case EMPTY:
+                    break;
+                case SUCCESS:
+                    Log.d(TAG, "newsResource:" + newsResource.data.toString());
+//                    getDataBing().setIsLoading(false);
+//                    if (!hasInitRecyclerView) {
+                    initBananer(newsResource.data.getTop_stories());
+//                        hasInitRecyclerView = true;
+//                    }
+                    break;
+                case LOADING:
+//                    getDataBing().setIsLoading(true);
+                    break;
+                case ERROR:
+                    Log.d(TAG, "newsResource:" + newsResource.message);
+                    break;
+            }
+        });
     }
 
     private void loadNews() {
@@ -79,6 +107,20 @@ public class MainActivity extends CommonDaggerActivity<ActivityMainBinding> {
         });
         getDataBing().listNews.setVisibility(View.VISIBLE);
 
+    }
+
+    private void initBananer(List<TopNewsService.News.TopStoriesBean> top_stories) {
+        getDataBing().bannerView.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+        getDataBing().bannerView.setImageLoader(new GlideImageLoader());
+        List<String> images = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
+        for (int i = 0; i < top_stories.size(); i++) {
+            images.add(top_stories.get(i).getImage());
+            titles.add(top_stories.get(i).getTitle());
+        }
+        getDataBing().bannerView.setImages(images);
+        getDataBing().bannerView.setBannerTitles(titles);
+        getDataBing().bannerView.start();
     }
 
     public static class DividerItemDecoration extends RecyclerView.ItemDecoration {

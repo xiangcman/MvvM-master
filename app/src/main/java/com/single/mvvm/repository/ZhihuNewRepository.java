@@ -11,7 +11,6 @@ import com.single.mvvm.common.NetworkBoundResource;
 import com.single.mvvm.common.Resource;
 import com.single.mvvm.db.dao.ExtraFieldDao;
 import com.single.mvvm.db.dao.ListNewsDao;
-import com.single.mvvm.db.dao.TopNewsDao;
 import com.single.mvvm.entity.ExtraField;
 import com.single.mvvm.entity.ListNews;
 import com.single.mvvm.retrofit.RetrofitProvider;
@@ -23,6 +22,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -35,13 +35,13 @@ public class ZhihuNewRepository {
     private static final String TAG = ZhihuNewRepository.class.getSimpleName();
     private ExtraFieldDao extraFieldDao;
     private ListNewsDao listNewsDao;
-    private TopNewsDao topNewsDao;
+//    private TopNewsDao topNewsDao;
 
     @Inject
-    public ZhihuNewRepository(ExtraFieldDao extraFieldDao, ListNewsDao listNewsDao, TopNewsDao topNewsDao) {
+    public ZhihuNewRepository(ExtraFieldDao extraFieldDao, ListNewsDao listNewsDao) {
         this.extraFieldDao = extraFieldDao;
         this.listNewsDao = listNewsDao;
-        this.topNewsDao = topNewsDao;
+//        this.topNewsDao = topNewsDao;
     }
 
     public LiveData<Resource<NewsService.News>> reload(final String date, final String dbDate) {
@@ -54,8 +54,7 @@ public class ZhihuNewRepository {
             @Override
             protected void saveCallResult(@NonNull NewsService.News news) {
                 List<NewsService.News.StoriesBean> storiesBeans = news.getStories();
-                for (int i = 0; i < storiesBeans.size(); i++) {
-                    NewsService.News.StoriesBean storiesBean = storiesBeans.get(i);
+                Observable.from(storiesBeans).filter(storiesBean -> storiesBean != null).subscribe(storiesBean -> {
                     ListNews listNews = new ListNews();
                     listNews.setTitle(storiesBean.getTitle());
                     listNews.setDate(news.getDate());
@@ -65,19 +64,15 @@ public class ZhihuNewRepository {
                     listNews.setMultipic(storiesBean.isMultipic());
                     List<String> images = storiesBean.getImages();
                     StringBuilder sb = new StringBuilder();
-                    for (int j = 0; j < images.size(); j++) {
-                        sb.append(images.get(j) + ",");
-                    }
+                    Observable.from(images).subscribe(s -> sb.append(s + ","));
                     listNews.setImages(sb.toString().substring(0, sb.toString().length() - 1));
-
                     listNewsDao.save(listNews);
                     NewsService.News.StoriesBean.ExtraField extraField = storiesBean.getExtraField();
                     if (extraField != null) {
                         ExtraField dbextraField = new ExtraField(storiesBean.getExtraField().isHeader(), storiesBean.getExtraField().getDate());
                         extraFieldDao.save(dbextraField);
                     }
-                }
-
+                });
             }
 
             @Override
@@ -132,15 +127,6 @@ public class ZhihuNewRepository {
             @Override
             protected LiveData<Resource<NewsService.News>> createCall(NewsService.News config) {
                 MutableLiveData<Resource<NewsService.News>> result = new MutableLiveData<>();
-                //todo network
-                //just关键字只是将多个数据遍历，在观察者里面直接可以拿来用
-//                Observable.just(Calendar.getInstance())
-//                        //doOnNewxt里面也相当于一个观察者，只不过里面只是简单的获取just中传过来的数据
-//                        .doOnNext(calendar -> calendar.add(Calendar.DAY_OF_MONTH, 1))
-//                        //map关键字是将一种数据类型转换成另外一种
-//                        .map(calendar -> NewsListHelper.DAY_FORMAT.format(calendar.getTime()))
-//                        .subscribe(s -> loadNewsList(s, result));
-
                 loadNewsList(date, result);
                 return result;
             }

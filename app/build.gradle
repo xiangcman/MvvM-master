@@ -92,4 +92,5 @@ dependencies {
     compile deps.room.runtime
     annotationProcessor deps.room.compiler
 
+    compile deps.banner
 }

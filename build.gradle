@@ -1,0 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        def jenkinsURL = System.getenv("JENKINS_URL")
+        def androidHome = System.getenv("ANDROID_HOME")
+        def motoMavenRepo = new File("$androidHome/extras/moto/m2repository")
+        maven {
+            url motoMavenRepo.path
+        }
+        if (jenkinsURL == null && !motoMavenRepo.exists()) {
+            mavenCentral()
+        }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+
+    apply from: 'versions.gradle'
+    addRepos(repositories)
+    dependencies {
+        classpath deps.android_gradle_plugin
+        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+    }
+}
+
+allprojects {
+    addRepos(repositories)
+}
+
+repositories {
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
+}

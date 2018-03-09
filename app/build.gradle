@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
+    defaultConfig {
+        applicationId 'com.single.mvvm'
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 100
+        versionName "1.0.0"
+        multiDexEnabled true
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        disable 'MissingRegistered'
+        disable 'InvalidPackage'
+        abortOnError false
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+    maven { url 'https://maven.google.com' }
+
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile deps.gson
+    compile deps.okhttp
+    compile deps.rxbinding
+    compile deps.glide
+    compile deps.brvah
+    compile deps.stetho
+
+    compile 'com.facebook.fresco:fresco:0.9.0+'
+
+    // Support
+    compile deps.support.design
+    compile deps.support.cardview
+
+    // Retrofit
+    compile deps.retrofit.runtime
+    compile deps.retrofit.gson
+    compile deps.retrofit.adapter
+
+    // Dagger
+    compile deps.dagger.runtime
+    compile deps.dagger.android
+    compile deps.dagger.android_support
+    annotationProcessor deps.dagger.android_support_compiler
+    annotationProcessor deps.dagger.compiler
+
+    //LiveData
+    compile deps.lifecycle.runtime
+    compile deps.lifecycle.extensions
+    annotationProcessor deps.lifecycle.compiler
+
+    //room
+    compile deps.room.runtime
+    annotationProcessor deps.room.compiler
+
+}

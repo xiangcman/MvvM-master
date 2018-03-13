@@ -1,6 +1,7 @@
 package com.single.mvvm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -165,8 +166,9 @@ public class MainActivity extends CommonDaggerActivity<ActivityMainBinding>
 
                 @Override
                 protected void itemClick(StoriesBean item) {
-//                    Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
-//                    intent.put
+                    Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
+                    intent.putExtra(NewsDetailActivity.EXTRA_NEWS_ID, item.getId());
+                    startActivity(intent);
                 }
             });
             getDataBing().listNews.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -1,6 +1,7 @@
 package com.single.mvvm.di;
 
 import com.single.mvvm.MainActivity;
+import com.single.mvvm.NewsDetailActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -15,5 +16,9 @@ public abstract class ActivityModule {
     @ContributesAndroidInjector
     /*(modules = MainModule.class) can add modules for activity like this*/
     abstract MainActivity mainActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract NewsDetailActivity detailActivity();
 
 }

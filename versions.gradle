@@ -18,6 +18,7 @@ versions.retrofit = "2.3.0"
 versions.dagger = "2.13"
 versions.banner="1.4.10"
 versions.circleimageview="2.2.0"
+versions.photoview="1.2.6"
 
 def deps = [:]
 def support = [:]
@@ -60,6 +61,8 @@ deps.stetho = "com.facebook.stetho:stetho:1.5.0"
 deps.banner = "com.youth.banner:banner:$versions.banner"
 
 deps.circleimageview = "de.hdodenhof:circleimageview:$versions.circleimageview"
+
+deps.photoview = "com.github.chrisbanes:PhotoView:$versions.photoview"
 
 def retrofit = [:]
 retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"

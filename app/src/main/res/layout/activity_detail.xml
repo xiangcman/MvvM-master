@@ -8,6 +8,14 @@
         <import type="android.view.View" />
 
         <variable
+            name="detail"
+            type="com.single.mvvm.service.NewsDetailService.NewsDetail" />
+
+        <variable
+            name="url"
+            type="String" />
+
+        <variable
             name="isLoading"
             type="Boolean" />
     </data>
@@ -36,10 +44,12 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
-                    android:id="@+id/banner_view"
+                    android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fitsSystemWindows="true" />
+                    android:fitsSystemWindows="true"
+                    android:scaleType="fitXY"
+                    app:imageUrl="@{detail.image}" />
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -71,7 +81,7 @@
                         android:id="@+id/webview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="-200dp"></WebView>
+                        app:webViewUrl="@{url}" />
 
                 </android.support.v4.widget.NestedScrollView>
 

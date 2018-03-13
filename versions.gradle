@@ -6,7 +6,7 @@ ext.deps = [:]
 def versions = [:]
 versions.android_gradle_plugin = "2.3.2"
 versions.arch = "1.0.0"
-versions.support = "25.3.1"
+versions.support = "26.1.0"
 versions.gson = "2.8.0"
 versions.rxjava = "1.1.0"
 versions.rxandroid = "1.1.0"
@@ -17,6 +17,7 @@ versions.glide = "4.3.1"
 versions.retrofit = "2.3.0"
 versions.dagger = "2.13"
 versions.banner="1.4.10"
+versions.circleimageview="2.2.0"
 
 def deps = [:]
 def support = [:]
@@ -57,6 +58,8 @@ deps.glide = "com.github.bumptech.glide:glide:$versions.glide"
 deps.stetho = "com.facebook.stetho:stetho:1.5.0"
 
 deps.banner = "com.youth.banner:banner:$versions.banner"
+
+deps.circleimageview = "de.hdodenhof:circleimageview:$versions.circleimageview"
 
 def retrofit = [:]
 retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"

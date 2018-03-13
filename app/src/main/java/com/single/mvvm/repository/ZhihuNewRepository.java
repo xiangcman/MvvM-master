@@ -13,6 +13,7 @@ import com.single.mvvm.db.dao.ExtraFieldDao;
 import com.single.mvvm.db.dao.ListNewsDao;
 import com.single.mvvm.entity.ExtraField;
 import com.single.mvvm.entity.ListNews;
+import com.single.mvvm.entity.StoriesBean;
 import com.single.mvvm.retrofit.RetrofitProvider;
 import com.single.mvvm.service.NewsService;
 
@@ -35,25 +36,21 @@ public class ZhihuNewRepository {
     private static final String TAG = ZhihuNewRepository.class.getSimpleName();
     private ExtraFieldDao extraFieldDao;
     private ListNewsDao listNewsDao;
-//    private TopNewsDao topNewsDao;
 
     @Inject
     public ZhihuNewRepository(ExtraFieldDao extraFieldDao, ListNewsDao listNewsDao) {
         this.extraFieldDao = extraFieldDao;
         this.listNewsDao = listNewsDao;
-//        this.topNewsDao = topNewsDao;
     }
 
     public LiveData<Resource<NewsService.News>> reload(final String date, final String dbDate) {
 
         Log.d(TAG, "date:" + date);
-        Log.d(TAG, "dbDate:" + dbDate);
 
         return new NetworkBoundResource<NewsService.News, NewsService.News>() {
-
             @Override
             protected void saveCallResult(@NonNull NewsService.News news) {
-                List<NewsService.News.StoriesBean> storiesBeans = news.getStories();
+                List<StoriesBean> storiesBeans = news.getStories();
                 Observable.from(storiesBeans).filter(storiesBean -> storiesBean != null).subscribe(storiesBean -> {
                     ListNews listNews = new ListNews();
                     listNews.setTitle(storiesBean.getTitle());
@@ -67,7 +64,7 @@ public class ZhihuNewRepository {
                     Observable.from(images).subscribe(s -> sb.append(s + ","));
                     listNews.setImages(sb.toString().substring(0, sb.toString().length() - 1));
                     listNewsDao.save(listNews);
-                    NewsService.News.StoriesBean.ExtraField extraField = storiesBean.getExtraField();
+                    StoriesBean.ExtraField extraField = storiesBean.getExtraField();
                     if (extraField != null) {
                         ExtraField dbextraField = new ExtraField(storiesBean.getExtraField().isHeader(), storiesBean.getExtraField().getDate());
                         extraFieldDao.save(dbextraField);
@@ -88,10 +85,10 @@ public class ZhihuNewRepository {
                 result.addSource(listNewsLiveData, listNews -> {
                     result.removeSource(listNewsLiveData);
                     NewsService.News news = new NewsService.News();
-                    List<NewsService.News.StoriesBean> storiesBean = new ArrayList<>();
+                    List<StoriesBean> storiesBean = new ArrayList<>();
                     for (int i = 0; i < listNews.size(); i++) {
                         ListNews listNews1 = listNews.get(i);
-                        NewsService.News.StoriesBean storiesBean1 = new NewsService.News.StoriesBean();
+                        StoriesBean storiesBean1 = new StoriesBean();
                         storiesBean1.setId(listNews1.getId());
                         storiesBean1.setGa_prefix(listNews1.getGa_prefix());
                         List<String> images = new ArrayList<>();
@@ -105,16 +102,19 @@ public class ZhihuNewRepository {
                         storiesBean1.setTitle(listNews1.getTitle());
                         storiesBean1.setType(listNews1.getType());
                         LiveData<ExtraField> extraFieldLiveData = extraFieldDao.loadExtraField(date);
-                        result.addSource(extraFieldLiveData, extraField -> {
-                            result.removeSource(extraFieldLiveData);
-                            if (extraField != null) {
-                                NewsService.News.StoriesBean.ExtraField extraField1 =
-                                        new NewsService.News.StoriesBean.ExtraField(extraField.isHeader(), extraField.getDate());
-                                storiesBean1.setExtraField(extraField1);
-                            }
+                        if (extraFieldLiveData.getValue() != null) {
+                            result.addSource(extraFieldLiveData, extraField -> {
+                                result.removeSource(extraFieldLiveData);
+                                if (extraField != null) {
+                                    StoriesBean.ExtraField extraField1 =
+                                            new StoriesBean.ExtraField(extraField.isHeader(), extraField.getDate());
+                                    storiesBean1.setExtraField(extraField1);
+                                }
+                                storiesBean.add(storiesBean1);
+                            });
+                        } else {
                             storiesBean.add(storiesBean1);
-                        });
-
+                        }
                     }
                     news.setStories(storiesBean);
                     news.setDate(date);

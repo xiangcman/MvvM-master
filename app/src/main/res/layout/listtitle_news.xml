@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="listtitle_item"
+            type="com.single.mvvm.entity.StoriesBean" />
+    </data>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:text="@{listtitle_item.suspensionTag}"
+        android:textColor="#ff4466"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+</layout>

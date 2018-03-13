@@ -93,4 +93,6 @@ dependencies {
     annotationProcessor deps.room.compiler
 
     compile deps.banner
+
+    compile deps.circleimageview
 }

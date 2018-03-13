@@ -35,7 +35,7 @@ public class MainModel extends AndroidViewModel {
         return zhihuNewRepository.reload(date, dbDate);
     }
 
-    public LiveData<Resource<TopNewsService.News>> loadTopNews() {
-        return zhihuTopNewsRepository.reload();
+    public LiveData<Resource<TopNewsService.News>> loadTopNews(String today) {
+        return zhihuTopNewsRepository.reload(today);
     }
 }

@@ -36,7 +36,7 @@ public class ZhihuTopNewsRepository {
         this.topNewsDao = topNewsDao;
     }
 
-    public LiveData<Resource<TopNewsService.News>> reload() {
+    public LiveData<Resource<TopNewsService.News>> reload(final String today) {
         return new NetworkBoundResource<TopNewsService.News, TopNewsService.News>() {
             @Override
             protected void saveCallResult(@NonNull TopNewsService.News item) {
@@ -48,6 +48,7 @@ public class ZhihuTopNewsRepository {
                     topNews.setImage(topStoriesBean.getImage());
                     topNews.setTitle(topStoriesBean.getTitle());
                     topNews.setType(topStoriesBean.getType());
+                    topNews.setDate(item.getDate());
                     topNewsDao.save(topNews);
                 });
             }
@@ -60,7 +61,7 @@ public class ZhihuTopNewsRepository {
             @NonNull
             @Override
             protected LiveData<TopNewsService.News> loadFromDb() {
-                LiveData<List<TopNews>> listLiveData = topNewsDao.selectTopNews();
+                LiveData<List<TopNews>> listLiveData = topNewsDao.selectTopNews(today);
                 MediatorLiveData<TopNewsService.News> result = new MediatorLiveData<>();
                 result.addSource(listLiveData, topNews -> {
                     result.removeSource(listLiveData);

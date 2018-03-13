@@ -108,6 +108,8 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 });
     }
 
+
+
     @SuppressLint("StaticFieldLeak")
     @MainThread
     private void saveResultAndReInit(@NonNull Resource<RequestType> response) {

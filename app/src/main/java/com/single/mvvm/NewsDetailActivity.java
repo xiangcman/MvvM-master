@@ -3,10 +3,13 @@ package com.single.mvvm;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
 import com.single.mvvm.common.CommonDaggerActivity;
 import com.single.mvvm.databinding.ActivityDetailBinding;
+import com.single.mvvm.fragment.PhotoViewFragment;
 import com.single.mvvm.retrofit.RetrofitProvider;
 import com.single.mvvm.service.NewsDetailService;
 import com.single.mvvm.utils.ViewUtils;
@@ -50,6 +53,13 @@ public class NewsDetailActivity extends CommonDaggerActivity<ActivityDetailBindi
             getDataBing().collapsingToolbar.setExpandedTitleColor(Color.argb(0, 255, 255, 255));
             //在合拢的时候，透明度是不断增大的
             getDataBing().collapsingToolbar.setCollapsedTitleTextColor(Color.argb(alpha, 255, 255, 255));
+        });
+
+        getDataBing().image.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            PhotoViewFragment fragment = PhotoViewFragment.newInstance(getDataBing().getDetail().getImage(), null);
+            fragment.show(fragmentManager, "fragment_girl_photo");
+            fragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);
         });
     }
 

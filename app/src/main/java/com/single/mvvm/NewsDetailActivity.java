@@ -60,6 +60,7 @@ public class NewsDetailActivity extends CommonDaggerActivity<ActivityDetailBindi
             PhotoViewFragment fragment = PhotoViewFragment.newInstance(getDataBing().getDetail().getImage(), null);
             fragment.show(fragmentManager, "fragment_girl_photo");
             fragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);
+
         });
     }
 
@@ -96,6 +97,7 @@ public class NewsDetailActivity extends CommonDaggerActivity<ActivityDetailBindi
                                 .map(s -> s + "</style>")
                                 .subscribe(s -> getDataBing().setUrl(s));
                         getDataBing().refreshLayout.setRefreshing(false);
+                        getDataBing().toolbar.setTitle(news.getTitle());
                     }
                 });
     }

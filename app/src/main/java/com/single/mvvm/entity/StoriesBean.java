@@ -18,6 +18,16 @@ public class StoriesBean implements Serializable, ISuspensionInterface {
     private long id;
     private List<String> images;
 
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    private boolean isRead;
+
     public String getTitle() {
         return title;
     }

@@ -22,7 +22,7 @@ import com.single.mvvm.entity.TopNews;
         ListNews.class,
         TopNews.class,
         ExtraField.class,
-        }, version = 2)
+        }, version = 3)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 

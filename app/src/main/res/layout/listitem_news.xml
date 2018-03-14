@@ -21,7 +21,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_alignParentRight="true"
-            bind:imageUrl="@{item.images.get(0)}"/>
+            bind:imageUrl="@{item.images.get(0)}" />
 
         <TextView
             android:id="@+id/title"
@@ -30,6 +30,7 @@
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/image"
             android:text="@{item.title}"
+            android:textColor="@{item.read?@color/dark:@color/black}"
             android:textStyle="bold" />
 
     </RelativeLayout>

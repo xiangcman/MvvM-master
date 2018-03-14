@@ -10,10 +10,20 @@ import android.arch.persistence.room.PrimaryKey;
 public class ListNews {
     @PrimaryKey
     private long id;
-//    private ExtraField extraField;
+    //    private ExtraField extraField;
     private String title;
     private String ga_prefix;
     private boolean multipic;
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    private boolean isRead;
     private int type;
 
     private String date;

@@ -101,6 +101,7 @@ public class ZhihuNewRepository {
                         storiesBean1.setMultipic(listNews1.isMultipic());
                         storiesBean1.setTitle(listNews1.getTitle());
                         storiesBean1.setType(listNews1.getType());
+                        storiesBean1.setRead(listNews1.isRead());
                         LiveData<ExtraField> extraFieldLiveData = extraFieldDao.loadExtraField(date);
                         if (extraFieldLiveData.getValue() != null) {
                             result.addSource(extraFieldLiveData, extraField -> {
@@ -155,5 +156,41 @@ public class ZhihuNewRepository {
                     }
                 });
 
+    }
+
+    public LiveData<Resource<ListNews>> updateStoriesBean(long id) {
+        return new NetworkBoundResource<ListNews, ListNews>() {
+            @Override
+            protected void saveCallResult(@NonNull ListNews item) {
+                listNewsDao.update(item);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable ListNews data) {
+                //如果当前的news不是已读状态
+                return !data.isRead();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ListNews> loadFromDb() {
+                LiveData<ListNews> listLiveData = listNewsDao.selectListNews(id);
+                MediatorLiveData<ListNews> result = new MediatorLiveData<>();
+                result.addSource(listLiveData, listNew -> {
+                    result.removeSource(listLiveData);
+                    result.setValue(listNew);
+                });
+                return result;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Resource<ListNews>> createCall(@Nullable ListNews data) {
+                MutableLiveData<Resource<ListNews>> result = new MutableLiveData<>();
+                data.setRead(true);
+                result.setValue(Resource.success(data));
+                return result;
+            }
+        }.getAsLiveData();
     }
 }

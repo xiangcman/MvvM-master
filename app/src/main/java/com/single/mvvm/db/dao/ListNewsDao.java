@@ -19,9 +19,13 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface ListNewsDao {
     @Query("SELECT * FROM ListNews where date =:date")
     LiveData<List<ListNews>> selectListNews(String date);
+
     @Insert(onConflict = REPLACE)
     void save(ListNews listNews);
 
     @Update
     void update(ListNews listNews);
+
+    @Query("SELECT * FROM ListNews where id =:id")
+    LiveData<ListNews> selectListNews(long id);
 }

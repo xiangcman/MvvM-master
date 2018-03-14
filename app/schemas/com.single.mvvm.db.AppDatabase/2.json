@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d5e20a6866fa153e1b66f515b83b7954",
+    "identityHash": "c0c982443d786d9646f08f93799afd24",
     "entities": [
       {
         "tableName": "ListNews",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `ga_prefix` TEXT, `multipic` INTEGER NOT NULL, `type` INTEGER NOT NULL, `date` TEXT, `images` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `ga_prefix` TEXT, `multipic` INTEGER NOT NULL, `isRead` INTEGER NOT NULL, `type` INTEGER NOT NULL, `date` TEXT, `images` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -29,6 +29,12 @@
           {
             "fieldPath": "multipic",
             "columnName": "multipic",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRead",
+            "columnName": "isRead",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -145,7 +151,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d5e20a6866fa153e1b66f515b83b7954\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c0c982443d786d9646f08f93799afd24\")"
     ]
   }
 }

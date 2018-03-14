@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.single.mvvm.common.Resource;
+import com.single.mvvm.entity.ListNews;
 import com.single.mvvm.repository.ZhihuNewRepository;
 import com.single.mvvm.repository.ZhihuTopNewsRepository;
 import com.single.mvvm.service.NewsService;
@@ -37,5 +38,9 @@ public class MainModel extends AndroidViewModel {
 
     public LiveData<Resource<TopNewsService.News>> loadTopNews(String today) {
         return zhihuTopNewsRepository.reload(today);
+    }
+
+    public LiveData<Resource<ListNews>> updateStoriesBean(long id) {
+        return zhihuNewRepository.updateStoriesBean(id);
     }
 }

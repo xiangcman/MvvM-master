@@ -166,9 +166,18 @@ public class MainActivity extends CommonDaggerActivity<ActivityMainBinding>
 
                 @Override
                 protected void itemClick(StoriesBean item) {
-                    Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
-                    intent.putExtra(NewsDetailActivity.EXTRA_NEWS_ID, item.getId());
-                    startActivity(intent);
+                    mainModel.updateStoriesBean(item.getId()).observe(MainActivity.this, storiesBeanResource -> {
+                        switch (storiesBeanResource.status) {
+                            case SUCCESS:
+                                item.setRead(true);
+                                recyclerViewDatabingAdapter.notifyDataSetChanged();
+                                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
+                                intent.putExtra(NewsDetailActivity.EXTRA_NEWS_ID, item.getId());
+                                startActivity(intent);
+                                break;
+                        }
+                    });
+
                 }
             });
             getDataBing().listNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -206,6 +215,11 @@ public class MainActivity extends CommonDaggerActivity<ActivityMainBinding>
         getDataBing().bannerView.setImages(images);
         getDataBing().bannerView.setBannerTitles(titles);
         getDataBing().bannerView.start();
+        getDataBing().bannerView.setOnBannerListener(i -> {
+            Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
+            intent.putExtra(NewsDetailActivity.EXTRA_NEWS_ID, top_stories.get(i).getId());
+            startActivity(intent);
+        });
     }
 
     private void initRefreshLayout() {

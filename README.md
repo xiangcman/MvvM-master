@@ -2,8 +2,12 @@
 
 ![框架图](https://upload-images.jianshu.io/upload_images/2528336-134e05206de8a2f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700)
 
-### demo:
-![demo](https://github.com/xiangcman/MvvM-master/blob/master/photos/demo.gif)
+### 主页:
+![主页](https://github.com/xiangcman/MvvM-master/blob/master/photos/主页面.gif)
+
+### 详情页:
+![详情页](https://github.com/xiangcman/MvvM-master/blob/master/photos/详情页.gif)
+
 
 **欢迎大家提出问题，留言板留言或邮箱直接联系我。我会第一时间测试相关的bug**
 
